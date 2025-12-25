@@ -2,34 +2,54 @@
 
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { apiService, HeroSlide } from '@/lib/api'
 
 export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0)
- 
-  const slides = [
+  const [slides, setSlides] = useState<HeroSlide[]>([])
+
+  const fallbackSlides: HeroSlide[] = [
     {
+      id: 0,
       image: "/modern-school-students.jpg",
       title: "№59 Мектеп гимназиясына қош келдіңіз",
       subtitle: "Болашақтың лидерлерін қалыптастыратын білім ордасы",
+      order: 1,
     },
     {
+      id: 1,
       image: "/students-learning-in-classroom-together.jpg",
       title: "Сапалы білім беру",
       subtitle: "Озық технологиялар мен ынталы мұғалімдерден құралған білім ордасы",
+      order: 2,
     },
     {
+      id: 2,
       image: "/diverse-students-teamwork-achievement.jpg",
       title: "Жетістіктің жолы",
       subtitle: "әрбір оқушының жеке қабілеті ашылып, жан-жақты дамытылады",
+      order: 3,
     },
   ]
 
   useEffect(() => {
+    let mounted = true
+    apiService.getHeroSlides().then(data => {
+      if (!mounted) return
+      if (Array.isArray(data) && data.length > 0) setSlides(data)
+      else setSlides(fallbackSlides)
+    }).catch(() => setSlides(fallbackSlides))
+
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length)
+      setCurrentSlide((prev) => (prev + 1) % Math.max(1, slides.length))
     }, 5000)
-    return () => clearInterval(timer)
+    return () => { mounted = false; clearInterval(timer) }
   }, [])
+
+  useEffect(() => {
+    // reset currentSlide if slides changed
+    setCurrentSlide(0)
+  }, [slides])
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length)
@@ -39,11 +59,13 @@ export default function Hero() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
   }
 
+  const visibleSlides = slides.length ? slides : fallbackSlides
+
   return (
     <section id="hero" className="relative pt-16 w-full h-screen overflow-hidden">
       {/* Carousel */}
       <div className="relative w-full h-full">
-        {slides.map((slide, index) => (
+        {visibleSlides.map((slide, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -78,7 +100,7 @@ export default function Hero() {
 
       {/* Dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {slides.map((_, index) => (
+        {visibleSlides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}

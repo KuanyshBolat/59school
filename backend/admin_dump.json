@@ -1,0 +1,97 @@
+{
+  "db_name": "C:\\Users\\AITU\\WebstormProjects\\59_school\\backend\\db.sqlite3",
+  "db_abspath": "C:\\Users\\AITU\\WebstormProjects\\59_school\\backend\\db.sqlite3",
+  "media_root": "C:\\Users\\AITU\\WebstormProjects\\59_school\\backend\\media",
+  "installed_apps": [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "corsheaders",
+    "achievements",
+    "content"
+  ],
+  "admin_registered": [
+    "auth.Group",
+    "auth.User",
+    "achievements.Certificate",
+    "content.NavLink",
+    "content.Header",
+    "content.HeroSlide",
+    "content.About",
+    "content.Stat",
+    "content.Director",
+    "content.ContactInfo",
+    "content.Footer",
+    "content.Page"
+  ],
+  "content_counts": {
+    "NavLink": 0,
+    "Header": 0,
+    "HeroSlide": 3,
+    "About": 1,
+    "Stat": 4,
+    "Director": 1,
+    "ContactInfo": 0,
+    "Footer": 0,
+    "Page": 0,
+    "ImageBlock": 0
+  },
+  "counts": {
+    "achievements.Certificate": 6
+  },
+  "samples": {
+    "hero_samples": [
+      {
+        "id": 1,
+        "title": "№59 Мектеп гимназиясына қош келдіңіз",
+        "image": "hero/modern-school-students.jpg"
+      },
+      {
+        "id": 2,
+        "title": "Сапалы білім беру",
+        "image": "hero/students-learning-in-classroom-together.jpg"
+      },
+      {
+        "id": 3,
+        "title": "Жетістіктің жолы",
+        "image": "hero/diverse-students-teamwork-achievement.jpg"
+      }
+    ],
+    "certificate_samples": [
+      {
+        "id": 6,
+        "title": "фыв",
+        "image": "certificates/6_z4hmcUn.jpg"
+      },
+      {
+        "id": 2,
+        "title": "тест 2",
+        "image": "certificates/2_BbMM2YY.jpg"
+      },
+      {
+        "id": 1,
+        "title": "test",
+        "image": "certificates/1_3KX6GtC.jpg"
+      },
+      {
+        "id": 5,
+        "title": "фыв",
+        "image": "certificates/5_Ija6YnG.jpg"
+      },
+      {
+        "id": 4,
+        "title": "фывыфвф",
+        "image": "certificates/4_bcWWIc8.jpg"
+      },
+      {
+        "id": 3,
+        "title": "фыв",
+        "image": "certificates/3_rYqNuAp.jpg"
+      }
+    ]
+  }
+}

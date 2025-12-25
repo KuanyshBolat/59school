@@ -1,5 +1,28 @@
+"use client"
+
+import { useEffect, useState } from 'react'
+import { apiService } from '@/lib/api'
+
 export default function Footer() {
+  const [footer, setFooter] = useState<any | null>(null)
   const currentYear = new Date().getFullYear()
+
+  const fallback = {
+    title: '№59 Мектеп-гимназия',
+    body: 'Балалардың болашағын ойлай отырып, озық білім беретін мектеп'
+  }
+
+  useEffect(() => {
+    let mounted = true
+    apiService.getFooter().then(data => {
+      if (!mounted) return
+      if (data) setFooter(data)
+      else setFooter(fallback)
+    }).catch(() => setFooter(fallback))
+    return () => { mounted = false }
+  }, [])
+
+  const f = footer || fallback
 
   return (
     <footer className="bg-primary text-primary-foreground py-12">
@@ -7,12 +30,11 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* About */}
           <div>
-            <h4 className="font-bold text-lg mb-4">№59 Мектеп-гимназия</h4>
+            <h4 className="font-bold text-lg mb-4">{f.title}</h4>
             <p className="text-primary-foreground/80 text-sm">
-              Балалардың болашағын ойлай отырып, озық білім беретін мектеп
+              {f.body}
             </p>
           </div>
-
           {/* Quick Links */}
           <div>
             <h4 className="font-bold text-lg mb-4">Сілтемелер</h4>
@@ -23,21 +45,22 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#stats" className="text-primary-foreground/80 hover:text-white transition-colors text-sm">
+                  Статистика
+                </a>
+              </li>
+              <li>
                 <a href="#director" className="text-primary-foreground/80 hover:text-white transition-colors text-sm">
                   Директор
                 </a>
               </li>
               <li>
-                <a
-                  href="#achievements"
-                  className="text-primary-foreground/80 hover:text-white transition-colors text-sm"
-                >
+                <a href="#achievements" className="text-primary-foreground/80 hover:text-white transition-colors text-sm">
                   Жетістіктер
                 </a>
               </li>
             </ul>
           </div>
-
           {/* Services */}
           <div>
             <h4 className="font-bold text-lg mb-4">Қызмет</h4>
@@ -59,30 +82,17 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-
           {/* Contact */}
           <div>
             <h4 className="font-bold text-lg mb-4">Байланыс</h4>
-            <ul className="space-y-2 text-sm">
-              <li className="text-primary-foreground/80">+7 (727) 299‒52‒97</li>
-              <li>
-                <a
-                  href="mailto:mektep59@almatybilim.kz"
-                  className="text-primary-foreground/80 hover:text-white transition-colors"
-                >
-                  mektep59@almatybilim.kz
-                </a>
-              </li>
-            </ul>
+            <p className="text-primary-foreground/80 text-sm">+7 (727) 299‒52‒97</p>
+            <p className="text-primary-foreground/80 text-sm">mektep59@almatybilim.kz</p>
+            <p className="text-primary-foreground/80 text-sm">Алматы, Түрксіб ауданы</p>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-primary-foreground/20 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-primary-foreground/80 text-sm">
-            © {currentYear} №59 Мектеп-гимназия. Барлық құқықтар сақталған.
-          </p>
-          
+        <div className="text-center">
+          <p className="text-primary-foreground/80 text-sm">© {currentYear} {f.title}. Барлық құқықтар қорғалған.</p>
         </div>
       </div>
     </footer>

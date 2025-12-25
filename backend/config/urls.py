@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('achievements.urls')),
+    path('api/achievements/', include('achievements.urls')),
+    path('api/content/', include('content.urls')),
 ]
 
 # Для отображения медиа файлов в режиме разработки

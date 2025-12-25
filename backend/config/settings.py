@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     
     # Local apps
     'achievements',
+    'content',
 ]
 
 MIDDLEWARE = [
@@ -105,7 +106,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:3001",
 ]
+
+# In development allow all origins for convenience
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = True
 
 # REST Framework settings
 REST_FRAMEWORK = {

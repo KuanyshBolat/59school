@@ -1,8 +1,9 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Phone, Mail, MapPin, Send } from "lucide-react"
+import { apiService } from '@/lib/api'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -13,6 +14,14 @@ export default function Contact() {
   const [loading, setLoading] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const [statusMessage, setStatusMessage] = useState("")
+  const [contact, setContact] = useState<any | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+    apiService.getContact().then(data => { if (!mounted) return; if (data) setContact(data) })
+    .catch(() => {})
+    return () => { mounted = false }
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,7 +43,6 @@ export default function Contact() {
         setSubmitStatus("success")
         setStatusMessage("Хабарламаныз сәтті жіберілді!")
         setFormData({ name: "", email: "", message: "" })
-        // Clear success message after 5 seconds
         setTimeout(() => setSubmitStatus("idle"), 5000)
       } else {
         setSubmitStatus("error")
@@ -48,6 +56,10 @@ export default function Contact() {
       setLoading(false)
     }
   }
+
+  const phone = contact?.phone || '+7 (727) 299‒52‒97'
+  const email = contact?.email || 'mektep59@almatybilim.kz'
+  const address = contact?.address || 'Алматы қаласы, Түрксіб ауданы, Т.Сауранбаев к-сі 12а'
 
   return (
     <section id="contact" className="py-16 md:py-24 px-4 bg-white">
@@ -65,7 +77,7 @@ export default function Contact() {
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">Телефон</h4>
-                <p className="text-muted-foreground">+7 (727) 299‒52‒97</p>
+                <p className="text-muted-foreground">{phone}</p>
               </div>
             </div>
 
@@ -75,7 +87,7 @@ export default function Contact() {
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">Эл. пошта</h4>
-                <p className="text-muted-foreground">mektep59@almatybilim.kz</p>
+                <p className="text-muted-foreground">{email}</p>
               </div>
             </div>
 
@@ -85,11 +97,7 @@ export default function Contact() {
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">Мекенжайымыз</h4>
-                <p className="text-muted-foreground">
-                  Алматы қаласы, Түрксіб ауданы,
-                  <br />
-                  Т.Сауранбаев к-сі 12а
-                </p>
+                <p className="text-muted-foreground">{address}</p>
               </div>
             </div>
 
