@@ -9,7 +9,9 @@ export default function About() {
   const fallback = {
     title: 'Мектеп туралы',
     body: '№50 мектеп-гимназия – балалардың толыққанды дамуы мен озық білім алуына бағытталған заманауи орталық',
-    image: '/123.JPG'
+    image: '/123.JPG',
+    title_color: '#000000',
+    body_color: '#333333'
   }
 
   useEffect(() => {
@@ -28,8 +30,8 @@ export default function About() {
     <section id="about" className="py-16 md:py-24 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">{data.title}</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4" style={{ color: data.title_color }}>{data.title}</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-balance" style={{ color: data.body_color, whiteSpace: 'pre-wrap' }}>
             {data.body}
           </p>
         </div>

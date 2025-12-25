@@ -44,6 +44,9 @@ class About(models.Model):
     title = models.CharField("Заголовок", max_length=255)
     body = models.TextField("Текст")
     image = models.ImageField("Изображение", upload_to='about/', blank=True, null=True)
+    # цвет заголовка и тела (например, #000000)
+    title_color = models.CharField("Цвет заголовка", max_length=7, blank=True, default='#000000')
+    body_color = models.CharField("Цвет текста", max_length=7, blank=True, default='#333333')
 
     class Meta:
         verbose_name = 'О школе'
@@ -70,6 +73,9 @@ class Director(models.Model):
     title = models.CharField("Должность", max_length=200, blank=True)
     bio = models.TextField("Биография", blank=True)
     image = models.ImageField("Фото", upload_to='director/', blank=True, null=True)
+    # цвета для имени/биографии
+    name_color = models.CharField("Цвет имени", max_length=7, blank=True, default='#000000')
+    bio_color = models.CharField("Цвет биографии", max_length=7, blank=True, default='#333333')
 
     class Meta:
         verbose_name = 'Директор'
@@ -83,6 +89,7 @@ class ContactInfo(models.Model):
     phone = models.CharField("Телефон", max_length=100, blank=True)
     email = models.CharField("Email", max_length=200, blank=True)
     map_embed = models.TextField("Код карты (embed)", blank=True)
+    text_color = models.CharField("Цвет текста", max_length=7, blank=True, default='#333333')
 
     class Meta:
         verbose_name = 'Контактная информация'

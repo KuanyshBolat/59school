@@ -33,7 +33,7 @@ class StatViewSet(ReadOnlyViewSet):
     serializer_class = StatSerializer
 
 class DirectorViewSet(ReadOnlyViewSet):
-    queryset = Director.objects.all()
+    queryset = Director.objects.all().order_by('-id')
     serializer_class = DirectorSerializer
 
 class ContactInfoViewSet(ReadOnlyViewSet):
@@ -51,4 +51,3 @@ class PageViewSet(ReadOnlyViewSet):
 class ImageBlockViewSet(ReadOnlyViewSet):
     queryset = ImageBlock.objects.all()
     serializer_class = ImageBlockSerializer
-

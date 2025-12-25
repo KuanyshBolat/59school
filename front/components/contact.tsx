@@ -60,6 +60,7 @@ export default function Contact() {
   const phone = contact?.phone || '+7 (727) 299‒52‒97'
   const email = contact?.email || 'mektep59@almatybilim.kz'
   const address = contact?.address || 'Алматы қаласы, Түрксіб ауданы, Т.Сауранбаев к-сі 12а'
+  const textColor = contact?.text_color || '#333333'
 
   return (
     <section id="contact" className="py-16 md:py-24 px-4 bg-white">
@@ -71,7 +72,7 @@ export default function Contact() {
           <div className="space-y-8">
             <h3 className="text-2xl font-bold text-foreground mb-6">Бізге хабарласыңыз</h3>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4" style={{ color: textColor }}>
               <div className="flex-shrink-0">
                 <Phone className="w-6 h-6 text-accent mt-1" />
               </div>
@@ -81,7 +82,7 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4" style={{ color: textColor }}>
               <div className="flex-shrink-0">
                 <Mail className="w-6 h-6 text-accent mt-1" />
               </div>
@@ -91,13 +92,13 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4" style={{ color: textColor }}>
               <div className="flex-shrink-0">
                 <MapPin className="w-6 h-6 text-accent mt-1" />
               </div>
               <div>
                 <h4 className="font-semibold text-foreground">Мекенжайымыз</h4>
-                <p className="text-muted-foreground">{address}</p>
+                <p className="text-muted-foreground" style={{ whiteSpace: 'pre-wrap' }}>{address}</p>
               </div>
             </div>
 

@@ -1,4 +1,4 @@
- "use client"
+"use client"
 
 import { useEffect, useState } from 'react'
 import { apiService } from '@/lib/api'
@@ -10,7 +10,9 @@ export default function Director() {
     name: 'Асан Ержанұлы',
     title: 'директор',
     bio: 'Мектебімізде озық әдіс-тәсілдер қолданылады, сыни ойлау қалыптасады',
-    image: '/school-director-professional-portrait.jpg'
+    image: '/school-director-professional-portrait.jpg',
+    name_color: '#000000',
+    bio_color: '#333333'
   }
 
   useEffect(() => {
@@ -24,6 +26,8 @@ export default function Director() {
   }, [])
 
   const d = director || fallback
+  const nameColor = d?.name_color || '#000000'
+  const bioColor = d?.bio_color || '#333333'
 
   return (
       <section id="director" className="py-20 px-8 bg-gradient-to-br from-white to-[#f6f6f6]">
@@ -39,13 +43,13 @@ export default function Director() {
                           />
                       </div>
                       <div className="text-center mt-8">
-                          <p className="text-white text-[32px]">{d.name}</p>
+                          <p className="text-white text-[32px]" style={{ color: nameColor }}>{d.name}</p>
                       </div>
                   </div>
 
-                  <div className="text-[#1a237e] space-y-6">
-                      <p>
-                          <span className="text-[#007dfc]">{d.bio}</span>
+                  <div className="space-y-6">
+                      <p style={{ color: bioColor, whiteSpace: 'pre-wrap' }}>
+                        {d.bio}
                       </p>
                       <p>
                           Біз балалардың білімді, жауапты, өз ойын еркін жеткізе алатын, болашаққа сеніммен қадам басатын тұлға болып қалыптасуына жағдай жасаймыз.
@@ -55,7 +59,7 @@ export default function Director() {
                       </p>
                       <p className="pt-4">Ізгі тілекпен,</p>
                       <p>
-                          <span>{d.name}, </span>
+                          <span style={{ color: nameColor }}>{d.name}, </span>
                           <span className="text-[#007dfc]">{d.title}</span>
                       </p>
                   </div>

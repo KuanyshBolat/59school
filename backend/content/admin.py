@@ -1,5 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.db import models
+from django.forms import Textarea
+from django import forms
 from .models import (
     NavLink, Header, HeroSlide, About, Stat, Director, ContactInfo, Footer, Page, ImageBlock
 )
@@ -57,9 +60,12 @@ class AboutAdmin(admin.ModelAdmin):
         return '-'
     image_tag.short_description = 'Preview'
 
-    list_display = ('id', 'title', 'image_tag')
+    list_display = ('id', 'title', 'image_tag', 'title_color', 'body_color')
     search_fields = ('title', 'body')
     readonly_fields = ('image_tag',)
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 60})},
+    }
 
 class DirectorAdmin(admin.ModelAdmin):
     def image_tag(self, obj):
@@ -71,17 +77,58 @@ class DirectorAdmin(admin.ModelAdmin):
         return '-'
     image_tag.short_description = 'Photo'
 
-    list_display = ('id', 'name', 'title', 'image_tag')
+    list_display = ('id', 'name', 'title', 'image_tag', 'name_color', 'bio_color')
     search_fields = ('name', 'bio')
     readonly_fields = ('image_tag',)
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 8, 'cols': 60})},
+    }
 
 class ContactInfoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'address', 'phone', 'email')
+    list_display = ('id', 'address', 'phone', 'email', 'text_color')
     search_fields = ('address', 'phone', 'email')
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 6, 'cols': 60})},
+    }
 
 class FooterAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
     search_fields = ('title', 'body')
+    formfield_overrides = {
+        models.TextField: {'widget': Textarea(attrs={'rows': 6, 'cols': 60})},
+    }
+
+# Color picker forms
+class AboutForm(forms.ModelForm):
+    class Meta:
+        model = About
+        fields = '__all__'
+        widgets = {
+            'title_color': forms.TextInput(attrs={'type': 'color'}),
+            'body_color': forms.TextInput(attrs={'type': 'color'}),
+        }
+
+class DirectorForm(forms.ModelForm):
+    class Meta:
+        model = Director
+        fields = '__all__'
+        widgets = {
+            'name_color': forms.TextInput(attrs={'type': 'color'}),
+            'bio_color': forms.TextInput(attrs={'type': 'color'}),
+        }
+
+class ContactInfoForm(forms.ModelForm):
+    class Meta:
+        model = ContactInfo
+        fields = '__all__'
+        widgets = {
+            'text_color': forms.TextInput(attrs={'type': 'color'}),
+        }
+
+# Assign forms to admin classes
+AboutAdmin.form = AboutForm
+DirectorAdmin.form = DirectorForm
+ContactInfoAdmin.form = ContactInfoForm
 
 # Register models with explicit admin classes
 admin.site.unregister(NavLink) if NavLink in admin.site._registry else None

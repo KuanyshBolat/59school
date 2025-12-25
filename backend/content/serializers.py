@@ -22,7 +22,7 @@ class HeroSlideSerializer(serializers.ModelSerializer):
 class AboutSerializer(serializers.ModelSerializer):
     class Meta:
         model = About
-        fields = ['id', 'title', 'body', 'image']
+        fields = ['id', 'title', 'body', 'image', 'title_color', 'body_color']
 
 class StatSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,12 +32,12 @@ class StatSerializer(serializers.ModelSerializer):
 class DirectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Director
-        fields = ['id', 'name', 'title', 'bio', 'image']
+        fields = ['id', 'name', 'title', 'bio', 'image', 'name_color', 'bio_color']
 
 class ContactInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactInfo
-        fields = ['id', 'address', 'phone', 'email', 'map_embed']
+        fields = ['id', 'address', 'phone', 'email', 'map_embed', 'text_color']
 
 class FooterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,4 +54,3 @@ class PageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Page
         fields = ['id', 'slug', 'title', 'body', 'order', 'images']
-
