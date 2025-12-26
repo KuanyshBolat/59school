@@ -134,3 +134,16 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
+
+# Лёгкое логирование применённых конфигов в продакшне (без секретов)
+try:
+    if not DEBUG:
+        import sys
+        print('=== DJANGO STARTUP CONFIG ===', file=sys.stdout)
+        print(f"CORS_ALLOWED_ORIGINS={CORS_ALLOWED_ORIGINS}", file=sys.stdout)
+        print(f"CSRF_TRUSTED_ORIGINS={CSRF_TRUSTED_ORIGINS}", file=sys.stdout)
+        print(f"ALLOWED_HOSTS={ALLOWED_HOSTS}", file=sys.stdout)
+        print(f"DEBUG={DEBUG}", file=sys.stdout)
+except Exception as _e:
+    # Не прерываем стартап приложения, просто проигнорируем ошибки логирования
+    pass

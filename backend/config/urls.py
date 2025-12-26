@@ -10,6 +10,13 @@ urlpatterns = [
     path('api/content/', include('content.urls')),
     # Health endpoint для отладки (возвращает Origin из запроса)
     path('api/health/', lambda request: JsonResponse({'ok': True, 'origin': request.META.get('HTTP_ORIGIN', '')})),
+    # Debug endpoint: показывает текущие конфиги CORS/CSRF/ALLOWED_HOSTS (без секретов). Удалить после отладки.
+    path('api/debug-config/', lambda request: JsonResponse({
+        'CORS_ALLOWED_ORIGINS': settings.CORS_ALLOWED_ORIGINS,
+        'CSRF_TRUSTED_ORIGINS': settings.CSRF_TRUSTED_ORIGINS,
+        'ALLOWED_HOSTS': settings.ALLOWED_HOSTS,
+        'DEBUG': settings.DEBUG,
+    })),
 ]
 
 # Для отображения медиа файлов в режиме разработки
