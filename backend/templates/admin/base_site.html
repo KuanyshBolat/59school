@@ -1,0 +1,32 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}№59 Мектеп - Панель управления{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'admin/custom_admin.css' %}">
+  <style>
+    :root {
+      --primary: #0ea5e9;
+      --primary-dark: #0284c7;
+      --secondary: #8b5cf6;
+    }
+  </style>
+{% endblock %}
+
+{% block branding %}
+<div style="background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); padding: 20px 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 4px 20px rgba(14, 165, 233, 0.2);">
+  <h1 style="margin: 0; font-size: 28px; font-weight: 700;">
+    <a href="/" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 12px;">
+      <span style="font-size: 32px;">⚙️</span>
+      <span>№59 Мектеп - Панель управления</span>
+    </a>
+  </h1>
+</div>
+{% endblock %}
+
+{% block messages %}
+  {{ block.super }}
+{% endblock %}
+
