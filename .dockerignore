@@ -1,0 +1,19 @@
+# Ignore common files/directories not needed in build context
+.git
+.gitignore
+node_modules
+venv
+env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+build
+dist
+.DS_Store
+*.log
+
+# don't ignore backend itself
+# backend/
+

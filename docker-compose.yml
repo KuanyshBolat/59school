@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    # add volumes or other settings as needed for dev
+
+  front:
+    build:
+      context: .
+      dockerfile: front/Dockerfile
+    ports:
+      - "3000:3000"
+    # front Dockerfile copies from `front/`, so we keep context as project root
+
