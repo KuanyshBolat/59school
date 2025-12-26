@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import dj_database_url
+from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,8 +12,28 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-secret-key-here-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
+# Helper to parse comma-separated env lists safely
+def env_list(name, default=''):
+    raw = os.environ.get(name, default)
+    return [s.strip() for s in raw.split(',') if s and s.strip()]
+
+# Helper to normalize origins: remove path and trailing slash and keep scheme://netloc
+def normalize_origin(origin: str) -> str:
+    origin = origin.strip()
+    # If origin looks like host without scheme, return as-is (for ALLOWED_HOSTS use)
+    if origin and not origin.startswith('http'):
+        return origin
+    try:
+        parsed = urlparse(origin)
+        if parsed.scheme and parsed.netloc:
+            return f"{parsed.scheme}://{parsed.netloc}"
+    except Exception:
+        pass
+    # Fallback: strip trailing slash
+    return origin.rstrip('/')
+
 # Hosts
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else []
+ALLOWED_HOSTS = env_list('ALLOWED_HOSTS') if os.environ.get('ALLOWED_HOSTS') else []
 
 # Application definition
 INSTALLED_APPS = [
@@ -120,9 +141,9 @@ if not DEBUG:
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS settings
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000').split(',')
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else []
+# CORS settings (normalize origins to avoid corsheaders.E014 errors)
+CORS_ALLOWED_ORIGINS = [normalize_origin(o) for o in env_list('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000')]
+CSRF_TRUSTED_ORIGINS = [normalize_origin(o) for o in env_list('CSRF_TRUSTED_ORIGINS')]
 
 # In development allow all origins for convenience
 if DEBUG:
