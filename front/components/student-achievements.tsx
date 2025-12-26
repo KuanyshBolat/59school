@@ -1,43 +1,85 @@
 "use client"
 
 import { useState } from "react"
-import CertificateModal from "./certificate-modal"
+import { CertificateModal } from "./certificate-modal"
+
+type CertificateItem = {
+  id: number
+  title: string
+  year: string
+  image: string
+  category: "teachers" | "students"
+  level: "district" | "city"
+}
 
 export default function StudentAchievements() {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [currentCategory, setCurrentCategory] = useState<"students" | "teachers">("students")
 
-  const certificates = [
+  const certificates: CertificateItem[] = [
     {
       id: 1,
+      title: 'Сертификат 1',
+      year: '2023',
+      category: 'students',
+      level: 'district',
       image: "/student/1.jpg",
     },
     {
       id: 2,
+      title: 'Сертификат 2',
+      year: '2023',
+      category: 'students',
+      level: 'district',
       image: "/student/2.jpg",
     },
     {
       id: 3,
+      title: 'Сертификат 3',
+      year: '2023',
+      category: 'students',
+      level: 'district',
       image: "/student/3.jpg",
     },
     {
       id: 4,
+      title: 'Сертификат 4',
+      year: '2023',
+      category: 'students',
+      level: 'district',
       image: "/student/4.jpg",
     },
     {
       id: 5,
+      title: 'Сертификат 5',
+      year: '2023',
+      category: 'students',
+      level: 'district',
       image: "/student/5.jpg",
     },
     {
       id: 6,
+      title: 'Сертификат 6',
+      year: '2023',
+      category: 'students',
+      level: 'district',
       image: "/student/6.jpg",
     },
     {
       id: 7,
+      title: 'Сертификат 7',
+      year: '2023',
+      category: 'students',
+      level: 'district',
       image: "/student/7.jpg",
     },
     {
       id: 8,
+      title: 'Сертификат 8',
+      year: '2023',
+      category: 'students',
+      level: 'district',
       image: "/student/8.jpg",
     },
   ]
@@ -75,10 +117,12 @@ export default function StudentAchievements() {
       {modalOpen && (
         <CertificateModal
           isOpen={modalOpen}
-          certificates={certificates}
-          selectedIndex={selectedIndex}
           onClose={() => setModalOpen(false)}
+          certificates={certificates}
+          currentIndex={selectedIndex}
           onNavigate={setSelectedIndex}
+          currentCategory={currentCategory}
+          onCategoryChange={setCurrentCategory}
         />
       )}
     </section>

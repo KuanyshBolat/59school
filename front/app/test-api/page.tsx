@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { apiService, Page, Post } from '@/lib/api';
+import { apiService, Page } from '@/lib/api';
 
 export default function TestApiPage() {
     const [pages, setPages] = useState<Page[]>([]);
-    const [posts, setPosts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -14,11 +14,12 @@ export default function TestApiPage() {
             try {
                 const [pagesResponse, postsResponse] = await Promise.all([
                     apiService.getPages(),
-                    apiService.getPosts(),
+                    // getPosts may not exist in some api implementations — guard with optional chaining
+                    (apiService as any).getPosts ? (apiService as any).getPosts() : [],
                 ]);
 
-                setPages(pagesResponse.data);
-                setPosts(postsResponse.data);
+                setPages(pagesResponse ?? []);
+                setPosts(postsResponse ?? []);
                 setLoading(false);
             } catch (err) {
                 setError('Ошибка при загрузке данных');
@@ -59,7 +60,7 @@ export default function TestApiPage() {
                     <p className="text-gray-500">Нет постов. Добавьте через админку Django.</p>
                 ) : (
                     <div className="space-y-2">
-                        {posts.map(post => (
+                        {posts.map((post: any) => (
                             <div key={post.id} className="p-3 border rounded">
                                 <h3 className="font-medium">{post.title}</h3>
                                 <p className="text-sm text-gray-600">{post.slug}</p>

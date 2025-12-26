@@ -3,7 +3,6 @@ const API_URL = `${BACKEND_BASE}/api/content`;
 
 function ensureImageUrl(img: string | null | undefined) {
     if (!img) return '';
-    if (typeof img !== 'string') return '';
     if (img.startsWith('http://') || img.startsWith('https://')) return img;
     // if image already contains /media/ prefix
     if (img.startsWith('/')) img = img.slice(1);
@@ -77,44 +76,50 @@ export const apiService = {
         const res = await fetch(`${API_URL}/about/`);
         if (!res.ok) throw new Error('Failed to fetch about');
         const data = await res.json();
-        // about may be a list; return first with normalized image
-        const item = Array.isArray(data) ? data[0] : data;
-        if (item) item.image = ensureImageUrl(item.image);
-        return item;
+        if (Array.isArray(data)) {
+            if (data[0]) data[0].image = ensureImageUrl(data[0].image);
+            return data[0];
+        }
+        if (data) data.image = ensureImageUrl(data.image);
+        return data;
     },
 
     async getDirector(): Promise<any> {
         const res = await fetch(`${API_URL}/director/`);
         if (!res.ok) throw new Error('Failed to fetch director');
         const data = await res.json();
-        const item = Array.isArray(data) ? data[0] : data;
-        if (item) item.image = ensureImageUrl(item.image);
-        return item;
+        if (Array.isArray(data)) {
+            if (data[0]) data[0].image = ensureImageUrl(data[0].image);
+            return data[0];
+        }
+        if (data) data.image = ensureImageUrl(data.image);
+        return data;
     },
 
     async getHeader(): Promise<any> {
         const res = await fetch(`${API_URL}/headers/`);
         if (!res.ok) throw new Error('Failed to fetch header');
         const data = await res.json();
-        const item = Array.isArray(data) ? data[0] : data;
-        if (item && item.logo) item.logo = ensureImageUrl(item.logo);
-        return item;
+        if (Array.isArray(data)) {
+            if (data[0] && data[0].logo) data[0].logo = ensureImageUrl(data[0].logo);
+            return data[0];
+        }
+        if (data && data.logo) data.logo = ensureImageUrl(data.logo);
+        return data;
     },
 
     async getContact(): Promise<any> {
         const res = await fetch(`${API_URL}/contact/`);
         if (!res.ok) throw new Error('Failed to fetch contact');
         const data = await res.json();
-        const item = Array.isArray(data) ? data[0] : data;
-        return item;
+        return Array.isArray(data) ? data[0] : data;
     },
 
     async getFooter(): Promise<any> {
         const res = await fetch(`${API_URL}/footers/`);
         if (!res.ok) throw new Error('Failed to fetch footer');
         const data = await res.json();
-        const item = Array.isArray(data) ? data[0] : data;
-        return item;
+        return Array.isArray(data) ? data[0] : data;
     },
 
     async getPages(): Promise<Page[]> {

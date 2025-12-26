@@ -1,45 +1,31 @@
 "use client"
 
 import { useState } from "react"
-import CertificateModal from "./certificate-modal"
+import { CertificateModal } from "./certificate-modal"
+
+type CertificateItem = {
+  id: number
+  title: string
+  year: string
+  image: string
+  category: "teachers" | "students"
+  level: "district" | "city"
+}
 
 export default function TeacherAchievements() {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
+  const [currentCategory, setCurrentCategory] = useState<"students" | "teachers">("teachers")
 
-  const certificates = [
-    {
-      id: 1,
-      image: "/teacher/1.jpg",
-    },
-    {
-      id: 2,
-      image: "/teacher/2.jpg",
-    },
-    {
-      id: 3,
-      image: "/teacher/3.jpg",
-    },
-    {
-      id: 4,
-      image: "/teacher/4.jpg",
-    },
-    {
-      id: 5,
-      image: "/teacher/5.jpg",
-    },
-    {
-      id: 6,
-      image: "/teacher/6.jpg",
-    },
-    {
-      id: 7,
-      image: "/teacher/7.jpg",
-    },
-    {
-      id: 8,
-      image: "/teacher/4.jpg",
-    },
+  const certificates: CertificateItem[] = [
+    { id: 1, title: 'Сертификат 1', year: '2023', category: 'teachers', level: 'city', image: "/teacher/1.jpg" },
+    { id: 2, title: 'Сертификат 2', year: '2023', category: 'teachers', level: 'city', image: "/teacher/2.jpg" },
+    { id: 3, title: 'Сертификат 3', year: '2023', category: 'teachers', level: 'city', image: "/teacher/3.jpg" },
+    { id: 4, title: 'Сертификат 4', year: '2023', category: 'teachers', level: 'city', image: "/teacher/4.jpg" },
+    { id: 5, title: 'Сертификат 5', year: '2023', category: 'teachers', level: 'city', image: "/teacher/5.jpg" },
+    { id: 6, title: 'Сертификат 6', year: '2023', category: 'teachers', level: 'city', image: "/teacher/6.jpg" },
+    { id: 7, title: 'Сертификат 7', year: '2023', category: 'teachers', level: 'city', image: "/teacher/7.jpg" },
+    { id: 8, title: 'Сертификат 8', year: '2023', category: 'teachers', level: 'city', image: "/teacher/8.jpg" },
   ]
 
   return (
@@ -75,10 +61,12 @@ export default function TeacherAchievements() {
       {modalOpen && (
         <CertificateModal
           isOpen={modalOpen}
-          certificates={certificates}
-          selectedIndex={selectedIndex}
           onClose={() => setModalOpen(false)}
+          certificates={certificates}
+          currentIndex={selectedIndex}
           onNavigate={setSelectedIndex}
+          currentCategory={currentCategory}
+          onCategoryChange={setCurrentCategory}
         />
       )}
     </section>
