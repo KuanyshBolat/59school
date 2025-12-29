@@ -1,4 +1,9 @@
-const BACKEND_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+// Normalize NEXT_PUBLIC_API_URL: remove trailing slashes and accidental "/api" suffix
+const _rawBackend = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+let BACKEND_BASE = _rawBackend.replace(/\/+$/g, '');
+if (BACKEND_BASE.endsWith('/api')) {
+    BACKEND_BASE = BACKEND_BASE.slice(0, -4);
+}
 const API_URL = `${BACKEND_BASE}/api/content`;
 
 function ensureImageUrl(img: string | null | undefined) {

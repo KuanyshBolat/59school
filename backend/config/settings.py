@@ -138,7 +138,10 @@ if os.environ.get('AWS_STORAGE_BUCKET_NAME'):
     AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', None)
 
     # Optional custom domain (e.g. CloudFront) — if not set, default S3 domain is used
-    AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN') or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    # If region is provided, prefer region-specific S3 domain to avoid redirects
+    AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN') or (
+        f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com" if AWS_S3_REGION_NAME else f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    )
 
     # Recommended settings
     AWS_DEFAULT_ACL = None
