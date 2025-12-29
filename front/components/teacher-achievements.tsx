@@ -16,6 +16,7 @@ export default function TeacherAchievements() {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [currentCategory, setCurrentCategory] = useState<"students" | "teachers">("teachers")
+  const [currentLevel, setCurrentLevel] = useState<"district" | "city">("city")
 
   const certificates: CertificateItem[] = [
     { id: 1, title: 'Сертификат 1', year: '2023', category: 'teachers', level: 'city', image: "/teacher/1.jpg" },
@@ -38,7 +39,11 @@ export default function TeacherAchievements() {
             <button
               key={cert.id}
               onClick={() => {
-                setSelectedIndex(index)
+                // ensure modal shows the clicked certificate within the filtered list for current category/level
+                setCurrentLevel(cert.level)
+                const filtered = certificates.filter(c => c.category === currentCategory && c.level === cert.level)
+                const idx = filtered.findIndex(c => c.id === cert.id)
+                setSelectedIndex(idx === -1 ? 0 : idx)
                 setModalOpen(true)
               }}
               className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-105 group cursor-pointer bg-gray-100 aspect-square"
@@ -67,6 +72,8 @@ export default function TeacherAchievements() {
           onNavigate={setSelectedIndex}
           currentCategory={currentCategory}
           onCategoryChange={setCurrentCategory}
+          currentLevel={currentLevel}
+          onLevelChange={setCurrentLevel}
         />
       )}
     </section>

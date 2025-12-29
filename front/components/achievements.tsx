@@ -41,17 +41,15 @@ export function Achievements() {
     }
 
     const handleCategoryChange = (category: "teachers" | "students") => {
+        // set category and reset index to first item in new filtered list
         setActiveTab(category)
-        // compute first index in filtered list for the new category & current level
-        const idx = certificates.findIndex((cert) => cert.category === category && cert.level === activeLevel)
-        setCurrentIndex(idx === -1 ? 0 : displayedCertificates.findIndex((c) => c.id === certificates[idx]?.id))
+        setCurrentIndex(0)
     }
 
     // when level changes, reset currentIndex to first in that level/category
     const handleLevelChange = (level: "district" | "city") => {
         setActiveLevel(level)
-        const idx = certificates.findIndex((cert) => cert.category === activeTab && cert.level === level)
-        setCurrentIndex(idx === -1 ? 0 : displayedCertificates.findIndex((c) => c.id === certificates[idx]?.id))
+        setCurrentIndex(0)
     }
 
     if (loading) {
@@ -149,6 +147,7 @@ export function Achievements() {
                 currentCategory={activeTab}
                 onCategoryChange={handleCategoryChange}
                 onLevelChange={setActiveLevel}
+                currentLevel={activeLevel}
             />
         </section>
     )

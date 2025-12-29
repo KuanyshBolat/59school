@@ -16,6 +16,7 @@ export default function StudentAchievements() {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [currentCategory, setCurrentCategory] = useState<"students" | "teachers">("students")
+  const [currentLevel, setCurrentLevel] = useState<"district" | "city">("district")
 
   const certificates: CertificateItem[] = [
     {
@@ -94,7 +95,10 @@ export default function StudentAchievements() {
             <button
               key={cert.id}
               onClick={() => {
-                setSelectedIndex(index)
+                setCurrentLevel(cert.level)
+                const filtered = certificates.filter(c => c.category === currentCategory && c.level === cert.level)
+                const idx = filtered.findIndex(c => c.id === cert.id)
+                setSelectedIndex(idx === -1 ? 0 : idx)
                 setModalOpen(true)
               }}
               className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-105 group cursor-pointer bg-gray-100 aspect-square"
@@ -123,6 +127,8 @@ export default function StudentAchievements() {
           onNavigate={setSelectedIndex}
           currentCategory={currentCategory}
           onCategoryChange={setCurrentCategory}
+          currentLevel={currentLevel}
+          onLevelChange={setCurrentLevel}
         />
       )}
     </section>
