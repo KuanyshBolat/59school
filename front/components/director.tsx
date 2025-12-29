@@ -42,9 +42,7 @@ export default function Director() {
                               className="w-full h-full object-cover object-center"
                           />
                       </div>
-                      <div className="text-center mt-6 md:mt-8">
-                          <p className="text-[24px] md:text-[32px] font-semibold" style={{ color: nameColor }}>{d.name}</p>
-                      </div>
+
                   </div>
 
                   <div className="space-y-6">
