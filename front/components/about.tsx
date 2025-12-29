@@ -40,14 +40,16 @@ export default function About() {
           <div className="relative">
             <div className="rounded-3xl overflow-hidden shadow-2xl">
               <div className="absolute inset-0 bg-black/15 rounded-3xl"></div>
-              <img
-                src={data.image || '/123.JPG'}
-                alt="Мектеп"
-                className="w-full h-[400px] object-cover"
-              />
+              <div className="w-full h-auto max-h-[420px] sm:max-h-[360px] md:max-h-[400px] overflow-hidden">
+                <img loading="lazy"
+                  src={data.image || '/123.JPG'}
+                  alt="Мектеп"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <div className="absolute bottom-8 left-8 right-8 text-white">
-                <p className="text-[32px] mb-4">Біздің миссия</p>
-                <p className="text-[20px]">
+                <p className="text-[24px] md:text-[32px] mb-4">Біздің миссия</p>
+                <p className="text-[16px] md:text-[20px]">
                   Ұлттық құндылықтарға бейімделген халықаралық тәжірибені енгізу арқылы сапалы білім беру ортасын құру
                 </p>
               </div>

@@ -33,17 +33,17 @@ export default function Director() {
       <section id="director" className="py-20 px-8 bg-gradient-to-br from-white to-[#f6f6f6]">
           <div className="max-w-7xl mx-auto">
               <div className="grid md:grid-cols-2 gap-12 items-center">
-                  <div className="relative">
+                  <div className="relative text-center md:text-left">
                       <div className="absolute inset-0 bg-black/5 rounded-full blur-2xl"></div>
-                      <div className="relative w-[460px] h-[460px] mx-auto rounded-full overflow-hidden border-8 border-white shadow-2xl">
-                          <img
+                      <div className="relative mx-auto md:mx-0 w-40 sm:w-56 md:w-72 lg:w-[460px] aspect-square rounded-full overflow-hidden border-8 border-white shadow-2xl">
+                          <img loading="lazy"
                               src={d.image}
                               alt={d.name}
-                              className="w-full h-[135%] object-cover object-center -mt-5"
+                              className="w-full h-full object-cover object-center"
                           />
                       </div>
-                      <div className="text-center mt-8">
-                          <p className="text-white text-[32px]" style={{ color: nameColor }}>{d.name}</p>
+                      <div className="text-center mt-6 md:mt-8">
+                          <p className="text-[24px] md:text-[32px] font-semibold" style={{ color: nameColor }}>{d.name}</p>
                       </div>
                   </div>
 

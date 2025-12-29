@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { X, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface Certificate {
@@ -20,6 +20,8 @@ interface CertificateModalProps {
     onNavigate: (index: number) => void
     currentCategory: "teachers" | "students"
     onCategoryChange: (category: "teachers" | "students") => void
+    currentLevel?: "district" | "city"
+    onLevelChange?: (level: "district" | "city") => void
 }
 
 export function CertificateModal({
@@ -30,12 +32,15 @@ export function CertificateModal({
                                      onNavigate,
                                      currentCategory,
                                      onCategoryChange,
+                                     currentLevel,
+                                     onLevelChange,
                                  }: CertificateModalProps) {
-    const [currentLevel, setCurrentLevel] = useState<"district" | "city">("district")
+    // use parent-controlled currentLevel instead of internal state
+    const level = currentLevel || "district"
 
     // Фильтруем сертификаты по текущей категории И уровню
     const filteredCertificates = certificates.filter(
-        cert => cert.category === currentCategory && cert.level === currentLevel
+        cert => cert.category === currentCategory && cert.level === level
     )
 
     useEffect(() => {
@@ -149,22 +154,22 @@ export function CertificateModal({
                     <div className="flex gap-2 bg-white/10 rounded-full p-1">
                         <button
                             onClick={() => {
-                                setCurrentLevel("district")
+                                onLevelChange && onLevelChange("district")
                                 onNavigate(0)
                             }}
                             className={`flex-1 py-2 px-3 rounded-full transition-all text-sm ${
-                                currentLevel === "district" ? "bg-white text-[#1a237e]" : "text-white hover:bg-white/20"
+                                level === "district" ? "bg-white text-[#1a237e]" : "text-white hover:bg-white/20"
                             }`}
                         >
                             Аудан деңгейі
                         </button>
                         <button
                             onClick={() => {
-                                setCurrentLevel("city")
+                                onLevelChange && onLevelChange("city")
                                 onNavigate(0)
                             }}
                             className={`flex-1 py-2 px-3 rounded-full transition-all text-sm ${
-                                currentLevel === "city" ? "bg-white text-[#1a237e]" : "text-white hover:bg-white/20"
+                                level === "city" ? "bg-white text-[#1a237e]" : "text-white hover:bg-white/20"
                             }`}
                         >
                             Қала деңгейі

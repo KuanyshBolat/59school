@@ -28,22 +28,30 @@ export function Achievements() {
         }
     };
 
+    // displayedCertificates derived from current filters
     const displayedCertificates = certificates
         .filter((cert) => cert.category === activeTab)
         .filter((cert) => cert.level === activeLevel);
 
     const handleCertificateClick = (certificate: Certificate) => {
-        const index = certificates.findIndex((cert) => cert.id === certificate.id)
-        setCurrentIndex(index)
+        // find index inside the filtered list (displayedCertificates)
+        const indexInFiltered = displayedCertificates.findIndex((cert) => cert.id === certificate.id)
+        setCurrentIndex(indexInFiltered === -1 ? 0 : indexInFiltered)
         setIsModalOpen(true)
     }
 
     const handleCategoryChange = (category: "teachers" | "students") => {
         setActiveTab(category)
-        const firstCertIndex = certificates.findIndex((cert) => cert.category === category)
-        if (firstCertIndex !== -1) {
-            setCurrentIndex(firstCertIndex)
-        }
+        // compute first index in filtered list for the new category & current level
+        const idx = certificates.findIndex((cert) => cert.category === category && cert.level === activeLevel)
+        setCurrentIndex(idx === -1 ? 0 : displayedCertificates.findIndex((c) => c.id === certificates[idx]?.id))
+    }
+
+    // when level changes, reset currentIndex to first in that level/category
+    const handleLevelChange = (level: "district" | "city") => {
+        setActiveLevel(level)
+        const idx = certificates.findIndex((cert) => cert.category === activeTab && cert.level === level)
+        setCurrentIndex(idx === -1 ? 0 : displayedCertificates.findIndex((c) => c.id === certificates[idx]?.id))
     }
 
     if (loading) {
@@ -85,7 +93,7 @@ export function Achievements() {
                 <div className="mb-8 flex justify-center">
                     <div className="inline-flex items-center gap-3 bg-white rounded-full p-1.5 shadow-md">
                         <button
-                            onClick={() => setActiveLevel("district")}
+                            onClick={() => handleLevelChange("district")}
                             className={`px-6 py-2 rounded-full transition-all ${
                                 activeLevel === "district" ? "bg-[#F64C00] text-white" : "text-[#1a237e] hover:bg-gray-100"
                             }`}
@@ -93,7 +101,7 @@ export function Achievements() {
                             Аудан деңгейіндегі жетістіктер
                         </button>
                         <button
-                            onClick={() => setActiveLevel("city")}
+                            onClick={() => handleLevelChange("city")}
                             className={`px-6 py-2 rounded-full transition-all ${
                                 activeLevel === "city" ? "bg-[#F64C00] text-white" : "text-[#1a237e] hover:bg-gray-100"
                             }`}
@@ -140,6 +148,7 @@ export function Achievements() {
                 onNavigate={setCurrentIndex}
                 currentCategory={activeTab}
                 onCategoryChange={handleCategoryChange}
+                onLevelChange={setActiveLevel}
             />
         </section>
     )

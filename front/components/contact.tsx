@@ -102,13 +102,13 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="mt-8 rounded-lg overflow-hidden shadow-md h-96">
+            <div className="mt-8 rounded-lg overflow-hidden shadow-md w-full max-h-[480px] sm:max-h-[420px] md:h-96">
               <iframe
                 id="map_63218287"
-                frameBorder="0"
+                title="Мектеб орналасқан жері"
                 width="100%"
                 height="100%"
-                title="Мектеб орналасқан жері"
+                style={{ border: 0 }}
                 src="https://makemap.2gis.ru/widget?data=eJw1j91Kw0AQhd9lvA11s9n8glcRRQmlRaFU6UXojnV1mwnbqdiGvruTqHMzMGfOmW8GoGAxoL1H2iMHhweoXgfgU49QwR22fAwIEfSBegw86QNsyVMQ_UrpIn7TorNjPzrU43nJts7Uuhn7dWPrs2o-ll_zulTN7ZLL2qh1sTP0tJo_f96I1eJhG1zPjjoJkMH5obP4DVWs_usSwe4X8DSe_6NbkOtY9rckT7iu5Qk-z2alKXReRCaZJYnJknQjfmehMrm-bCLYt_2CDu734AC-ZZGmXZXGWmdJaVQZgR_lMS1ViYrzXBfKpFrwiPYCl0mogJP3q3dE_zJNORzx8gOOvWfy"
                 sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
               />
