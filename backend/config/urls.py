@@ -2,15 +2,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 import os
-import urllib.parse
+import subprocess
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/achievements/', include('achievements.urls')),
     path('api/content/', include('content.urls')),
 ]
+
 
 # Temporary protected endpoint to create superuser when console is not available.
 # To use: set ADMIN_SETUP_TOKEN env in Railway to a long random string, redeploy,
@@ -19,61 +20,59 @@ urlpatterns = [
 # Remove endpoint and token after use.
 
 def _normalize_token_candidate(token_raw):
-    # Return a set of normalized variants to compare against secret
-    variants = set()
-    if token_raw is None:
-        return variants
-    token_raw = token_raw.strip()
-    variants.add(token_raw)
+    if not token_raw:
+        return ''
+    # Accept token in query param or header; allow URL-encoding
     try:
-        token_decoded = urllib.parse.unquote(token_raw)
-        variants.add(token_decoded)
-        variants.add(token_decoded.replace(' ', '+'))
-        # also try converting spaces to plus then unquote_plus
-        variants.add(urllib.parse.unquote_plus(token_raw))
+        return os.path.normpath(token_raw)
     except Exception:
-        pass
-    # also try replacing literal spaces with plus
-    variants.add(token_raw.replace(' ', '+'))
-    return variants
+        return token_raw
 
 
 def _internal_create_admin(request):
-    # Token can be passed via query param ?token=... or header X-Admin-Token
-    token_q = request.GET.get('token')
-    token_h = request.headers.get('X-Admin-Token') if hasattr(request, 'headers') else request.META.get('HTTP_X_ADMIN_TOKEN')
-    token_candidate_values = set()
-    if token_q:
-        token_candidate_values.update(_normalize_token_candidate(token_q))
-    if token_h:
-        token_candidate_values.update(_normalize_token_candidate(token_h))
-
-    secret = os.environ.get('ADMIN_SETUP_TOKEN')
-    if not secret:
-        return HttpResponseBadRequest('ADMIN_SETUP_TOKEN not set on server')
-    if not token_candidate_values:
-        return HttpResponseBadRequest('missing token')
-
-    if secret not in token_candidate_values:
+    token_expected = os.environ.get('ADMIN_SETUP_TOKEN')
+    token_given = request.GET.get('token') or request.headers.get('X-Admin-Token')
+    token_given = _normalize_token_candidate(token_given)
+    if not token_expected or token_given != token_expected:
         return HttpResponseBadRequest('invalid token')
 
+    # Create superuser from env vars if present
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
     username = os.environ.get('DJANGO_SUPERUSER_USERNAME')
     email = os.environ.get('DJANGO_SUPERUSER_EMAIL')
     password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
-    if not username or not email or not password:
-        return HttpResponseBadRequest('DJANGO_SUPERUSER_* env vars missing')
-
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
+    if not username or not password:
+        return HttpResponseBadRequest('missing creds')
     if User.objects.filter(username=username).exists():
-        return JsonResponse({'status': 'exists', 'username': username})
-    User.objects.create_superuser(username=username, email=email, password=password)
-    return JsonResponse({'status': 'created', 'username': username})
+        return JsonResponse({'status': 'already_exists'})
+    User.objects.create_superuser(username=username, email=email or '', password=password)
+    return JsonResponse({'status': 'created'})
 
-# register route only when DEBUG is False to avoid accidental exposure in development
+
+def _internal_upload_media(request):
+    token_expected = os.environ.get('ADMIN_SETUP_TOKEN')
+    token_given = request.GET.get('token') or request.headers.get('X-Admin-Token')
+    token_given = _normalize_token_candidate(token_given)
+    if not token_expected or token_given != token_expected:
+        return HttpResponseBadRequest('invalid token')
+
+    # Run the management command upload_media_to_s3
+    try:
+        # Use subprocess to call manage.py so that Django env is same
+        base_dir = settings.BASE_DIR
+        manage_py = os.path.join(base_dir, 'manage.py')
+        subprocess.check_output(['python', manage_py, 'upload_media_to_s3'], stderr=subprocess.STDOUT)
+        return JsonResponse({'status': 'uploaded'})
+    except subprocess.CalledProcessError as e:
+        return HttpResponseBadRequest(str(e.output))
+
+
+# register routes only when DEBUG is False to avoid accidental exposure in development
 if not settings.DEBUG:
     urlpatterns += [
         path('internal-create-admin/', _internal_create_admin),
+        path('internal-upload-media/', _internal_upload_media),
     ]
 
 # Для отображения медиа файлов в режиме разработки
