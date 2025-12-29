@@ -51,12 +51,7 @@ export default function Director() {
                       <p style={{ color: bioColor, whiteSpace: 'pre-wrap' }}>
                         {d.bio}
                       </p>
-                      <p>
-                          Біз балалардың білімді, жауапты, өз ойын еркін жеткізе алатын, болашаққа сеніммен қадам басатын тұлға болып қалыптасуына жағдай жасаймыз.
-                      </p>
-                      <p>
-                          Сіздермен бірлесе отырып, биік мақсаттарға бірге жетеміз деп сенемін.
-                      </p>
+
                       <p className="pt-4">Ізгі тілекпен,</p>
                       <p>
                           <span style={{ color: nameColor }}>{d.name}, </span>

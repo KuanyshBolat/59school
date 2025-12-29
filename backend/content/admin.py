@@ -161,8 +161,18 @@ class NavLinkAdmin(admin.ModelAdmin):
     ordering = ('order',)
     search_fields = ('name', 'href')
 
-class HeaderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'phone', 'email')
+class HeaderAdmin(S3AdminUploadMixin, admin.ModelAdmin):
+    def logo_tag(self, obj):
+        if getattr(obj, 'logo', None):
+            try:
+                return format_html('<img src="{}" style="height:80px; object-fit:contain;" />', obj.logo.url)
+            except Exception:
+                return obj.logo
+        return '-'
+    logo_tag.short_description = 'Preview'
+
+    list_display = ('id', 'phone', 'email', 'logo_tag')
+    readonly_fields = ('logo_tag',)
     filter_horizontal = ('nav_links',)
     search_fields = ('phone', 'email')
 

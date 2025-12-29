@@ -5,8 +5,13 @@ export async function POST(request: NextRequest) {
     const { name, email, message } = await request.json()
 
     // Telegram Bot API параметры
-    const botToken = "8490195398:AAGa7TGHkf6Gg83Nj-9O2pMVmcz_SbLuzso"
-    const chatId = "5006602561"
+    const botToken = process.env.TELEGRAM_BOT_TOKEN
+    const chatId = process.env.TELEGRAM_CHAT_ID
+
+    if (!botToken || !chatId) {
+      console.error("[v0] Telegram credentials not set in environment")
+      return NextResponse.json({ error: "Telegram credentials not configured" }, { status: 500 })
+    }
 
     // Форматирование сообщения
     const telegramMessage = `
