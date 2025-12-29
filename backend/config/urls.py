@@ -68,11 +68,28 @@ def _internal_upload_media(request):
         return HttpResponseBadRequest(str(e.output))
 
 
+def _internal_test_media(request):
+    token_expected = os.environ.get('ADMIN_SETUP_TOKEN')
+    token_given = request.GET.get('token') or request.headers.get('X-Admin-Token')
+    token_given = _normalize_token_candidate(token_given)
+    if not token_expected or token_given != token_expected:
+        return HttpResponseBadRequest('invalid token')
+
+    try:
+        base_dir = settings.BASE_DIR
+        manage_py = os.path.join(base_dir, 'manage.py')
+        out = subprocess.check_output(['python', manage_py, 'test_media_storage', '--cleanup'], stderr=subprocess.STDOUT)
+        return HttpResponse(out, content_type='text/plain')
+    except subprocess.CalledProcessError as e:
+        return HttpResponseBadRequest(e.output)
+
+
 # register routes only when DEBUG is False to avoid accidental exposure in development
 if not settings.DEBUG:
     urlpatterns += [
         path('internal-create-admin/', _internal_create_admin),
         path('internal-upload-media/', _internal_upload_media),
+        path('internal-test-media/', _internal_test_media),
     ]
 
 # Для отображения медиа файлов в режиме разработки
